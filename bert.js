@@ -57,6 +57,11 @@ class BertAlert {
     $( '.bert-alert' ).on( 'click', () => { this.hide(); } );
   }
 
+  registerExternalClickHandler( selector, fx ) {
+    // Expects a jquery selector and a function to run on click
+    $( selector ).on( 'click', (e) => { fx(e); } );
+  }
+
   bertTimer() {
     clearTimeout( this.timer );
     this.timer = setTimeout( () => { this.hide(); }, this.defaults.hideDelay );
@@ -67,6 +72,13 @@ class BertAlert {
     $( '.bert-alert' ).addClass( 'show' ).delay( 25 ).queue( () => {
       $( '.bert-alert' ).addClass( 'animate' ).dequeue();
     });
+
+    if ( this.externalClick && this.externalClick.selector && this.externalClick.fx ) {
+      this.registerExternalClickHandler(
+        this.externalClick.selector,
+        this.externalClick.fx
+      );
+    }
   }
 
   hide() {
